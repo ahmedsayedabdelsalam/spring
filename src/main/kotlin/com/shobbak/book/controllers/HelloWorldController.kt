@@ -1,7 +1,6 @@
 package com.shobbak.book.controllers
 
 import com.shobbak.book.dto.AuthorDto
-import com.shobbak.book.dto.BookDto
 import com.shobbak.book.entity.Author
 import com.shobbak.book.entity.Book
 import com.shobbak.book.entity.Category
@@ -9,10 +8,15 @@ import com.shobbak.book.mapper.AuthorMapper
 import com.shobbak.book.repos.AuthorRepo
 import com.shobbak.book.repos.BookRepo
 import com.shobbak.book.repos.CategoryRepo
-import org.springframework.http.ResponseEntity
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.io.Decoders
+import io.jsonwebtoken.security.Keys
+import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
-import java.time.LocalDateTime
+import java.util.Date
+
 
 @RestController
 class HelloWorldController(
@@ -20,10 +24,29 @@ class HelloWorldController(
     var authorRepo: AuthorRepo, val categoryRepo: CategoryRepo, val bookRepo: BookRepo) {
     companion object {
         const val HELLO_WORLD = "Hello World!"
+        val KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256)
     }
 
     @GetMapping("/hello")
     fun helloWorld() = HELLO_WORLD
+
+    @GetMapping("/login")
+    fun login() = "login success"
+
+    @GetMapping("/jwt")
+    fun jwt(): String {
+        return Jwts.builder().subject("ahmed@gmail.com")
+            .issuedAt(Date())
+            .expiration(Date(Date().time + 300000))
+            .signWith(KEY).compact()
+    }
+
+    @GetMapping("/decode")
+    fun decode(@RequestHeader(name = "Authorization") authorization: String): String {
+        return Jwts.parser().verifyWith(KEY).build()
+            .parseSignedClaims(authorization.substringAfter(" "))
+            .payload.subject
+    }
 
     @GetMapping("")
     fun saveAuthor(): MutableList<Author> {

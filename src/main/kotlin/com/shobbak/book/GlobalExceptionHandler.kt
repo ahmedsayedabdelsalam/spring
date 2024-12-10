@@ -1,5 +1,7 @@
 package com.shobbak.book
 
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.JwtException
 import jakarta.validation.ValidationException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -31,6 +33,11 @@ class GlobalExceptionHandler {
             }
 
         return ResponseEntity(errorsHash, HttpStatus.UNPROCESSABLE_ENTITY)
+    }
+
+    @ExceptionHandler(JwtException::class)
+    fun handleExpiredJWTException(ex: JwtException): ResponseEntity<String> {
+       return ResponseEntity("Invalid Token", HttpStatus.UNAUTHORIZED)
     }
 
 }
