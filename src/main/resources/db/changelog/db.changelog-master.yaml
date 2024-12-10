@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: classpath:/db/changelog/authors-changelog.xml
+  - include:
+      file: classpath:/db/changelog/books-changelog.xml
+  - include:
+      file: classpath:/db/changelog/authors-add-column-changelog.xml
