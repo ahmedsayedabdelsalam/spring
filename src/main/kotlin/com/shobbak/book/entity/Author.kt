@@ -1,5 +1,6 @@
 package com.shobbak.book.entity
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 
 @Entity
@@ -10,10 +11,12 @@ class Author: BaseEntity() {
     @Column(nullable = false)
     var age: Int? = null
     @OneToMany(
+        fetch = FetchType.EAGER,
         mappedBy = "author",
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
     )
+    @JsonBackReference
     var books: MutableList<Book> = mutableListOf()
 
     fun addBook(book: Book) {
