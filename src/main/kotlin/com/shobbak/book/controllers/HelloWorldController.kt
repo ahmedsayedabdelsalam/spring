@@ -4,7 +4,7 @@ import com.shobbak.book.entity.Author
 import com.shobbak.book.repos.AuthorRepo
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @RestController
 class HelloWorldController(var authorRepo: AuthorRepo) {
@@ -22,7 +22,7 @@ class HelloWorldController(var authorRepo: AuthorRepo) {
         author.age = 23
         authorRepo.save(author)
         author = authorRepo.findAll().first()
-        author.createdAt = LocalDateTime.now().plusYears(1)
+        author.createdAt = ZonedDateTime.now().plusYears(1)
         authorRepo.save(author)
         return authorRepo.findAll()
     }
