@@ -10,12 +10,10 @@ class BaseEntityObserver {
     fun prePersist(target: BaseEntity) {
         target.createdAt = LocalDateTime.now()
         target.updatedAt = target.createdAt
-        println("Author Persisted")
     }
 
     @PreUpdate
     fun preUpdate(target: BaseEntity) {
         target.updatedAt = LocalDateTime.now()
-        println("Author Updated")
     }
 }
