@@ -11,12 +11,11 @@ class Author: BaseEntity() {
     @Column(nullable = false)
     var age: Int? = null
     @OneToMany(
-        fetch = FetchType.EAGER,
+//        fetch = FetchType.EAGER,
         mappedBy = "author",
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
     )
-    @JsonBackReference
     var books: MutableList<Book> = mutableListOf()
 
     fun addBook(book: Book) {

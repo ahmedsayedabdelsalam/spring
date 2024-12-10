@@ -1,5 +1,6 @@
 package com.shobbak.book.entity
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*;
 
 @Entity
@@ -7,6 +8,7 @@ import jakarta.persistence.*;
 class Book : BaseEntity() {
     var name: String? = null
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     var author: Author? = null

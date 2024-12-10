@@ -2,7 +2,7 @@ spring:
   application:
     name: book
   datasource:
-    url: jdbc:mysql://localhost/book?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost/spring_101?createDatabaseIfNotExist=true
     username: root
     password: root
   jpa:

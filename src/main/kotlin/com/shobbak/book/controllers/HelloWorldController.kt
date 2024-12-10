@@ -5,6 +5,7 @@ import com.shobbak.book.dto.BookDto
 import com.shobbak.book.entity.Author
 import com.shobbak.book.entity.Book
 import com.shobbak.book.entity.Category
+import com.shobbak.book.mapper.AuthorMapper
 import com.shobbak.book.repos.AuthorRepo
 import com.shobbak.book.repos.BookRepo
 import com.shobbak.book.repos.CategoryRepo
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
 
 @RestController
-class HelloWorldController(var authorRepo: AuthorRepo, val categoryRepo: CategoryRepo, val bookRepo: BookRepo) {
+class HelloWorldController(
+    private val authorMapper: AuthorMapper,
+    var authorRepo: AuthorRepo, val categoryRepo: CategoryRepo, val bookRepo: BookRepo) {
     companion object {
         const val HELLO_WORLD = "Hello World!"
     }
@@ -24,14 +27,16 @@ class HelloWorldController(var authorRepo: AuthorRepo, val categoryRepo: Categor
 
     @GetMapping("")
     fun saveAuthor(): MutableList<Author> {
-        var author = Author()
-        author.name = "ahmed"
-        author.age = 23
-        authorRepo.save(author)
-        author = authorRepo.findAll().first()
-        author.createdAt = LocalDateTime.now().plusYears(1)
-        authorRepo.save(author)
-        return authorRepo.findAll()
+        var user2 = authorMapper.toEntity(AuthorDto(name = "test", age = 20))
+        authorRepo.save(user2)
+//        var author = Author()
+//        author.name = "ahmed"
+//        author.age = 23
+//        authorRepo.save(author)
+//        author = authorRepo.findAll().first()
+//        author.createdAt = LocalDateTime.now().plusYears(1)
+//        authorRepo.save(author)
+        return authorRepo.fetchAuthorsWithBooks()
     }
 
     @GetMapping("/update")
