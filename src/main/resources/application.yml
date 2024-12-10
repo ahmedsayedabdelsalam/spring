@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: book
+  datasource:
+    url: jdbc:mysql://localhost/book?createDatabaseIfNotExist=true
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
