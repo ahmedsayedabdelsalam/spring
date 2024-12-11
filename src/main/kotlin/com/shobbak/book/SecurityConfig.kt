@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 class SecurityConfig(
-    jwtAuthentication: JwtAuthentication
+    val jwtAuthentication: JwtAuthentication
 ) {
 
     private val AUTH_WHITELIST = arrayOf(
@@ -49,10 +49,9 @@ class SecurityConfig(
                 sessionManagement
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
+            .addFilterBefore(jwtAuthentication, UsernamePasswordAuthenticationFilter::class.java)
 
-        return http
-            .addFilterBefore(jwtAuthentication, UsernamePasswordAuthenticationFilter.class)
-        .build()
+        return http.build()
     }
 
 }

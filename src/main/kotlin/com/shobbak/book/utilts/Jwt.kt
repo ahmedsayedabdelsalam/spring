@@ -28,4 +28,10 @@ class Jwt(
             .signWith(KEY)
             .compact()
     }
+
+    fun claim(token: String): String {
+        return Jwts.parser().verifyWith(KEY).build()
+            .parseSignedClaims(token)
+            .payload.subject
+    }
 }
