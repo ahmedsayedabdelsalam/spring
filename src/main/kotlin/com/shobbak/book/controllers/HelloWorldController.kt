@@ -42,7 +42,7 @@ class HelloWorldController(
     fun jwt(): String {
         println(KEY)
         return Jwts.builder()
-            .claims(mutableMapOf("sub" to "test", "author" to "shobbak"))
+            .claims(mutableMapOf("sub" to "test", "author" to "ahmed"))
             .issuedAt(Date())
             .expiration(Date(Date().time + 300000))
             .signWith(KEY).compact()
@@ -58,7 +58,7 @@ class HelloWorldController(
 
     @GetMapping("")
     fun saveAuthor(): MutableList<Author> {
-        var user2 = authorMapper.toEntity(AuthorDto(name = "test", age = 20))
+        val user2 = authorMapper.toEntity(AuthorDto(name = "test", age = 20))
         authorRepo.save(user2)
 //        var author = Author()
 //        author.name = "ahmed"
@@ -72,21 +72,21 @@ class HelloWorldController(
 
     @GetMapping("/update")
     fun updateAuthor(): MutableList<Author> {
-        var author = authorRepo.findAll().first()
-        author.name = "shobbak"
+        val author = authorRepo.findAll().first()
+        author.name = "ahmed"
         authorRepo.save(author)
         return authorRepo.findAll()
     }
 
     @GetMapping("relation")
     fun relation(): MutableList<Author> {
-        var author = Author()
+        val author = Author()
         author.name = "ahmed"
         author.age = 23
-        var book1 = Book()
+        val book1 = Book()
         book1.name = "java"
         book1.author = author
-        var book2 = Book()
+        val book2 = Book()
         book2.name = "php"
         book2.author = author
         author.books.addAll(mutableSetOf(book1, book2))
@@ -96,7 +96,7 @@ class HelloWorldController(
 
     @GetMapping("/delete")
     fun deleteAuthor(): String {
-        var author = authorRepo.findAll().first()
+        val author = authorRepo.findAll().first()
         author.books.removeAll(author.books)
         authorRepo.save(author)
         return "ok"
@@ -104,11 +104,11 @@ class HelloWorldController(
 
     @GetMapping("/attach")
     fun attachCategoryToBook(): Book {
-        var author = Author()
+        val author = Author()
         author.name = "ahmed"
         author.age = 23
 
-        var book1 = Book()
+        val book1 = Book()
         book1.name = "java"
         book1.author = author
 
@@ -116,9 +116,9 @@ class HelloWorldController(
 
         authorRepo.save(author)
 
-        var book = bookRepo.findAll().first()
+        val book = bookRepo.findAll().first()
 
-        var category = Category()
+        val category = Category()
         category.name = "tech"
 
         categoryRepo.save(category)
@@ -128,14 +128,14 @@ class HelloWorldController(
         bookRepo.save(book)
 
 
-        return book;
+        return book
 
     }
 
 
     @GetMapping("/detach")
     fun detachCategoryToBook(): Book {
-        var book = bookRepo.findAll().first()
+        val book = bookRepo.findAll().first()
         book.categories.removeAll(book.categories)
         bookRepo.save(book)
         return book
@@ -144,7 +144,7 @@ class HelloWorldController(
 
     @GetMapping("/delete-book")
     fun deleteBook(): String {
-        var book = bookRepo.findAll().first()
+        val book = bookRepo.findAll().first()
         bookRepo.delete(book)
         return "ok"
     }
