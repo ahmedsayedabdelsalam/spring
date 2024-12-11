@@ -2,6 +2,7 @@ package com.shobbak.book
 
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
+import jakarta.validation.ConstraintViolationException
 import jakarta.validation.ValidationException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus

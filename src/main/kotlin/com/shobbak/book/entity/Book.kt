@@ -19,6 +19,7 @@ class Book : BaseEntity() {
         joinColumns = [JoinColumn(name = "book_id", nullable = false)],
         inverseJoinColumns = [JoinColumn(name = "category_id", nullable = false)]
     )
+    @JsonBackReference
     var categories: MutableList<Category> = mutableListOf()
 
     @PreRemove
