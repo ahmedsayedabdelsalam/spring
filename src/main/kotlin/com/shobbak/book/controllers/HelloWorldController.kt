@@ -9,11 +9,10 @@ import com.shobbak.book.repos.AuthorRepo
 import com.shobbak.book.repos.BookRepo
 import com.shobbak.book.repos.CategoryRepo
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
-import io.jsonwebtoken.SignatureAlgorithm
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.Date
 
@@ -24,7 +23,13 @@ class HelloWorldController(
     var authorRepo: AuthorRepo, val categoryRepo: CategoryRepo, val bookRepo: BookRepo) {
     companion object {
         const val HELLO_WORLD = "Hello World!"
-        val KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256)
+        lateinit var KEY: javax.crypto.SecretKey
+            private set
+    }
+
+    @Value("\${jwt.secret}")
+    fun setSecret(secret: String) {
+        KEY = Keys.hmacShaKeyFor(secret.toByteArray())
     }
 
     @GetMapping("/hello")
@@ -35,17 +40,20 @@ class HelloWorldController(
 
     @GetMapping("/jwt")
     fun jwt(): String {
-        return Jwts.builder().subject("ahmed@gmail.com")
+        println(KEY)
+        return Jwts.builder()
+            .claims(mutableMapOf("sub" to "test", "author" to "shobbak"))
             .issuedAt(Date())
             .expiration(Date(Date().time + 300000))
             .signWith(KEY).compact()
     }
 
     @GetMapping("/decode")
-    fun decode(@RequestHeader(name = "Authorization") authorization: String): String {
+    fun decode(@RequestParam(name = "Authorization") authorization: String): String {
+        println(KEY)
         return Jwts.parser().verifyWith(KEY).build()
-            .parseSignedClaims(authorization.substringAfter(" "))
-            .payload.subject
+            .parseSignedClaims(authorization)
+            .payload["author"].toString()
     }
 
     @GetMapping("")
